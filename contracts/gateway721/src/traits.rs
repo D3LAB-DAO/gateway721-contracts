@@ -3,7 +3,7 @@ use serde::Serialize;
 
 use cosmwasm_std::{CustomMsg, Deps, DepsMut, Env, MessageInfo, Response, StdResult};
 
-use crate::msg::TaskIdsResponse;
+use crate::msg::{IncompleteProjectsResponse, TaskIdsResponse};
 
 pub trait Gateway721<T, C>: Gateway721Execute<T, C> + Gateway721Query<T>
 where
@@ -54,4 +54,6 @@ where
     T: Serialize + DeserializeOwned + Clone,
 {
     fn remains(&self, deps: Deps, token_id: String) -> StdResult<TaskIdsResponse>;
+
+    fn incomplete_projects(&self, deps: Deps) -> StdResult<IncompleteProjectsResponse>;
 }

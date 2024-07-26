@@ -3,7 +3,7 @@ use schemars::JsonSchema;
 
 use cosmwasm_std::{to_binary, Binary, CustomMsg, Deps, Env, StdResult};
 
-use crate::msg::{QueryMsg, TaskIdsResponse};
+use crate::msg::{IncompleteProjectsResponse, QueryMsg, TaskIdsResponse};
 use crate::state::{Extension, Gateway721Contract};
 use crate::traits::Gateway721Query;
 use cw721_base::QueryMsg as Cw721QueryMsg;
@@ -17,6 +17,7 @@ where
     pub fn query(&self, deps: Deps, env: Env, msg: QueryMsg<Q>) -> StdResult<Binary> {
         match msg {
             QueryMsg::Remains { token_id } => to_binary(&self.remains(deps, token_id)?),
+            QueryMsg::IncompleteProjects {} => to_binary(&self.incomplete_projects(deps)?),
             _ => self.cw721.query(deps, env, msg.into()),
         }
     }
@@ -47,6 +48,10 @@ where
         };
 
         Ok(TaskIdsResponse { tids: task_ids })
+    }
+
+    fn incomplete_projects(&self, deps: Deps) -> StdResult<IncompleteProjectsResponse> {
+        self.incomplete_projects.load(deps.storage)
     }
 }
 

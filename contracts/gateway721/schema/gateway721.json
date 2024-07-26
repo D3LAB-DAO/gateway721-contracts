@@ -881,6 +881,19 @@
         "additionalProperties": false
       },
       {
+        "type": "object",
+        "required": [
+          "incomplete_projects"
+        ],
+        "properties": {
+          "incomplete_projects": {
+            "type": "object",
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      {
         "description": "Query the contract's ownership information",
         "type": "object",
         "required": [
@@ -1402,6 +1415,23 @@
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Null",
       "type": "null"
+    },
+    "incomplete_projects": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "IncompleteProjectsResponse",
+      "type": "object",
+      "required": [
+        "pids"
+      ],
+      "properties": {
+        "pids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
     },
     "minter": {
       "$schema": "http://json-schema.org/draft-07/schema#",

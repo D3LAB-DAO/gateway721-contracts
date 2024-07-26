@@ -370,6 +370,19 @@
       "additionalProperties": false
     },
     {
+      "type": "object",
+      "required": [
+        "incomplete_projects"
+      ],
+      "properties": {
+        "incomplete_projects": {
+          "type": "object",
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    {
       "description": "Query the contract's ownership information",
       "type": "object",
       "required": [

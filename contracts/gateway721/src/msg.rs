@@ -113,6 +113,9 @@ pub enum QueryMsg<Q: JsonSchema> {
     /// Return Requests
     #[returns(TaskIdsResponse)]
     Remains { token_id: String },
+
+    #[returns(IncompleteProjectsResponse)]
+    IncompleteProjects {},
 }
 
 #[cw_ownable_execute]
