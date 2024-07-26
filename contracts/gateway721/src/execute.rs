@@ -2,10 +2,12 @@ use serde::de::DeserializeOwned;
 use serde::Serialize;
 
 use crate::msg::{ExecuteMsg, IncompleteProjectsResponse, InstantiateMsg};
-use crate::state::{Extension, Gateway721Contract, Task};
+use crate::state::{Extension, Gateway721Contract, OtherContractExecuteMsg, Task};
 use crate::traits::Gateway721Execute;
 
-use cosmwasm_std::{CustomMsg, DepsMut, Env, MessageInfo, Response, StdResult};
+use cosmwasm_std::{
+    to_binary, Addr, CustomMsg, DepsMut, Env, MessageInfo, Response, StdResult, WasmMsg,
+};
 use cw721_base::state::TokenInfo;
 use cw721_base::{
     ContractError, ExecuteMsg as Cw721ExecuteMsg, InstantiateMsg as Cw721InstantiateMsg,
@@ -159,7 +161,7 @@ where
             if let Some(ref mut tasks) = metadata.tasks {
                 // Find the task with the specified id and set the output
                 if let Some(task) = tasks.iter_mut().find(|task| task.tid == task_id) {
-                    task.output = Some(output);
+                    task.output = Some(output.clone());
                 } else {
                     return Err(ContractError::Std(cosmwasm_std::StdError::generic_err(
                         "task not found.",
@@ -179,7 +181,18 @@ where
         // Save the updated token back to storage
         self.cw721.tokens.save(deps.storage, &token_id, &token)?;
 
-        // TODO: destination
+        // send `output` to destination address
+        if let Some(ref mut metadata) = token.extension {
+            if let Some(ref mut dest) = metadata.destination {
+                let msg = WasmMsg::Execute {
+                    contract_addr: dest.to_string(),
+                    msg: to_binary(&OtherContractExecuteMsg::ReceiveOutput {
+                        output: output.clone(),
+                    })?,
+                    funds: vec![],
+                };
+            }
+        }
 
         // Create response
         Ok(Response::new()

@@ -2,8 +2,9 @@ use cosmwasm_schema::cw_serde;
 use cosmwasm_std::{Addr, CustomMsg};
 
 use cw_storage_plus::Item;
+use schemars::JsonSchema;
 use serde::de::DeserializeOwned;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
 use cw721_base::Cw721Contract;
 
@@ -63,4 +64,11 @@ where
             cw721: Cw721Contract::default(),
         }
     }
+}
+
+// Callee
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub enum OtherContractExecuteMsg {
+    ReceiveOutput { output: String },
 }
