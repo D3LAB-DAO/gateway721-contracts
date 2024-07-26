@@ -1,7 +1,6 @@
-# AI-driven development
+# Gateway721 Contracts
 
-/// Create a project.
-/// Gateway-GPT-bot will automatically generate a title and description.
+<!-- TBD -->
 
 ---
 
